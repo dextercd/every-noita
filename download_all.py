@@ -16,6 +16,7 @@ manifest_lines = [m for m in manifest_all_lines if m and '#' not in m]
 manifest_parts = [m.split() for m in manifest_lines]
 manifests = [Manifest(c) for _, _, _, _, _, _, _, _, _, c in manifest_parts]
 
+download_count = 0
 
 for manifest in manifests:
 
@@ -37,6 +38,15 @@ for manifest in manifests:
                 '-manifest', str(manifest.code),
                 '-dir', path],
             check=True)
+
+        download_count += 1
+        if download_count % 20 == 0:
+            print('Running rdfind')
+            subprocess.run([
+                'rdfind',
+                    '-makehardlinks', 'true',
+                    'downloads/'],
+                check=True)
     except:
         # Error, clear path for retry
         print('Download failed, removing', path)
