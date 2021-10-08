@@ -2,22 +2,15 @@ import os
 import subprocess
 import pathlib
 import shutil
-from collections import namedtuple
+
+import manifest
 
 from settings import username, password, depot_downloader_path
 
 
-Manifest = namedtuple('Manifest', 'code')
-
-
-manifest_list_content = open('manifests.txt').read()
-manifest_all_lines = manifest_list_content.split('\n')
-manifest_lines = [m for m in manifest_all_lines if m and '#' not in m]
-manifest_parts = [m.split() for m in manifest_lines]
-manifests = [Manifest(c) for _, _, _, _, _, _, _, _, _, c in manifest_parts]
-
 download_count = 0
 
+manifests = manifest.load_file('manifests.txt')
 for manifest in manifests:
 
     try:
