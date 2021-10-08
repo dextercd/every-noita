@@ -2,3 +2,5 @@ settings.py
 __pycache__/
 downloads/
 hashes
+linear_repo/
+venv/
