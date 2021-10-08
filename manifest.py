@@ -29,7 +29,10 @@ def parse_datetime(part):
     month = month_str_to_month(month_str)
     year = int(year_str)
     time = datetime.time.fromisoformat(time_str)
-    return datetime.datetime(year, month, day, time.hour, time.minute, time.second)
+    return datetime.datetime(
+        year, month, day,
+        time.hour, time.minute, time.second,
+        tzinfo=datetime.timezone.utc)
 
 
 def line_to_manifest(line):
