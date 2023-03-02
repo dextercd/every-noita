@@ -20,13 +20,6 @@ repository = project / 'linear_repo'
 repository.mkdir(exist_ok=True)
 os.chdir(repository)
 
-has_git = (repository / '.git').exists()
-if not has_git:
-    subprocess.run([
-        'git', 'init',
-            '--initial-branch', 'main'],
-        check=True)
-
 keep_paths = ['.git']
 def clear_repo():
     for item in repository.iterdir():
@@ -38,8 +31,43 @@ def clear_repo():
         else:
             shutil.rmtree(item)
 
+clean_paths = [".DepotDownloader"]
+def clean_repo():
+    for item in repository.iterdir():
+        if item.name not in clean_paths:
+            continue
+
+        if item.is_file():
+            item.unlink()
+        else:
+            shutil.rmtree(item)
+
+has_git = (repository / '.git').exists()
+if not has_git:
+    subprocess.run([
+        'git', 'init',
+            '--initial-branch', 'main'],
+        check=True)
+
+
+existing_manifests_result = subprocess.run(
+    ["git", "log", "--format=%s"],
+    check=True,
+    capture_output=True,
+    encoding="utf-8"
+)
+existing_manifests = [
+    int(line.removeprefix("Commit manifest "))
+    for line in existing_manifests_result.stdout.split("\n")
+    if line
+]
+
 
 for manifest in manifests:
+
+    if manifest.code in existing_manifests:
+        continue
+
     manifest_location = project / 'downloads' / str(manifest.code)
     assert manifest_location.exists()
 
@@ -47,6 +75,7 @@ for manifest in manifests:
 
     clear_repo()
     shutil.copytree(manifest_location, repository, dirs_exist_ok=True)
+    clean_repo()
 
     dectypes = ['v1', 'v2', 'plain']
     decsuccess = False
