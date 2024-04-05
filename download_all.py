@@ -5,7 +5,7 @@ import shutil
 
 import manifest
 
-from settings import username, password, depot_downloader_path
+from settings import username, depot_downloader_path
 
 
 download_count = 0
@@ -25,7 +25,7 @@ for manifest in manifests:
         subprocess.run([
             'dotnet', depot_downloader_path,
                 '-username', username,
-                '-password', password,
+                '-remember-password',
                 '-app', str(881100),
                 '-depot', str(881101),
                 '-manifest', str(manifest.code),
