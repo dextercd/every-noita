@@ -102,7 +102,7 @@ for manifest in manifests:
         'find', '.', '-type', 'f',
             '!', '-path', './.git/*',
             '-regextype', 'egrep',
-            '-regex', '.*\.(txt|lua|xml|csv|bat|frag|vert)',
+            '-regex', r'.*\.(txt|lua|xml|csv|bat|frag|vert)',
             '-exec', 'dos2unix', '{}', '+'],
         check=True)
 
@@ -111,8 +111,8 @@ for manifest in manifests:
         'find', '.', '-type', 'f',
             '!', '-path', './.git/*',
             '-regextype', 'egrep',
-            '-regex', '.*\.(txt|lua|xml|csv|bat|frag|vert)',
-            '-exec', 'sed', '-i', 's/\s\+$//', '{}', '+'],
+            '-regex', r'.*\.(txt|lua|xml|csv|bat|frag|vert)',
+            '-exec', 'sed', '-i', r's/\s\+$//', '{}', '+'],
         check=True)
 
     dt = manifest.datetime.astimezone(ZoneInfo('Europe/Helsinki'))
