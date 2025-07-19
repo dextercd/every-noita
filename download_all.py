@@ -25,11 +25,12 @@ for manifest in manifests:
         subprocess.run([
             'dotnet', depot_downloader_path,
                 '-username', username,
-                '-remember-password',
+                '-beta', 'noitabeta',
                 '-app', str(881100),
                 '-depot', str(881101),
                 '-manifest', str(manifest.code),
-                '-dir', path],
+                '-dir', str(path),
+            ],
             check=True)
 
         download_count += 1
